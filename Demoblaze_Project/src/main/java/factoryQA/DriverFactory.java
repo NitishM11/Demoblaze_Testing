@@ -12,7 +12,7 @@ public class DriverFactory {
 	public WebDriver driver;
 	
 	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>(); //for parallel execution of test cases
-	
+	//0
 	//For initiliaze the THreadLocal on the basis of Given browser
 	
 	public WebDriver init_driver(String browser) {
