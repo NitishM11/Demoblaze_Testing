@@ -10,12 +10,13 @@ import factoryQA.DriverFactory;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pages.CartPage;
 import pages.HomePage;
-
 
 public class HomepageSteps {
 
 	private HomePage homepage = new HomePage(DriverFactory.getDriver());
+	private CartPage cartPage = new CartPage(DriverFactory.getDriver());
 
 	@Given("user is on homepage")
 	public void user_is_on_homepage() {
@@ -137,26 +138,68 @@ public class HomepageSteps {
 	@Then("Number of items shown on homepage should be {int}")
 	public void number_of_items_shown_on_homepage_should_be(Integer ExpectedNumberOfItems) {
 		int numberOfItemsVisible = homepage.listOfProducts().size();
-		if(ExpectedNumberOfItems==numberOfItemsVisible) {
-			System.out.println("Number of visible items : "+numberOfItemsVisible);
+		if (ExpectedNumberOfItems == numberOfItemsVisible) {
+			System.out.println("Number of visible items : " + numberOfItemsVisible);
 		}
 
 	}
 
 	@Then("Previous and Next button should be displayed")
 	public void previous_and_next_button_should_be_displayed() {
-		assertEquals(true,
-				homepage.previousButtonDisplayed(), "Previuos Button is not displayed");
-		assertEquals(true,
-				homepage.nextButtonDisplayed(), "Previuos Button is not displayed");
-		}
+		assertEquals(true, homepage.previousButtonDisplayed(), "Previuos Button is not displayed");
+		assertEquals(true, homepage.nextButtonDisplayed(), "Previuos Button is not displayed");
+	}
 
 	@Then("Filter buttons for Catogories,Phones,Laptops and Monitors should be displayed")
 	public void filter_buttons_for_catogories_phones_laptops_and_monitors_should_be_displayed() {
-		assertEquals(true,
-				homepage.catogoriesButtonDisplayed(), "Catogories Button is not displayed");
-		assertEquals(true,
-				homepage.phonesButtonDisplayed(), "Catogories Button is not displayed");
+		assertEquals(true, homepage.catogoriesButtonDisplayed(), "Catogories Button is not displayed");
+		assertEquals(true, homepage.phonesButtonDisplayed(), "Catogories Button is not displayed");
+	}
+
+	@Then("user enters a new username")
+	public void user_enters_a_new_username() {
+		homepage.enterNewUsername();
+	}
+
+	@Then("user enters a new password")
+	public void user_enters_a_new_password() {
+		homepage.enterNewPassword();
+	}
+
+	@Then("user cliks on Sign_up button")
+	public void user_cliks_on_sign_up_button() {
+		homepage.clickOnNewUserSign_up();
+
+	}
+
+	@Then("login using those credentials")
+	public void login_using_those_credentials() {
+		homepage.clickOnLogin();
+		homepage.enterNewCredentials();
+		homepage.clickOnFinalLogin();
+
+	}
+
+	@Then("user clicks on Cart Button")
+	public void user_clicks_on_cart_button() {
+		homepage.clickOnCartButton();
+	}
+
+	@Then("user clicks on Phones Button")
+	public void user_clicks_on_phones_button() {
+		homepage.clickOnPhones();
+	}
+
+	@Then("user clicks on the product")
+	public void user_clicks_on_the_product() {
+		homepage.clickOnProduct();
+	}
+
+	@Then("alert should be diplayed with the message {string}")
+	public void alert_should_be_diplayed_with_the_message(String string) {
+		assertEquals(string, homepage.getTextFromAlert());
+		System.out.println(homepage.getTextFromAlert());
+		homepage.acceptAlert();
 	}
 
 }

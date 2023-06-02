@@ -1,7 +1,10 @@
 package pages;
 
 import java.util.List;
-
+import java.util.Scanner;
+import java.util.UUID;
+import org.openqa.selenium.Alert;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,13 +29,12 @@ public class HomePage {
 	private By phonesButton = By.xpath("//div//a[contains(text(),'Phones')]");
 	private By laptopsButton = By.name("/html/body/div[5]/div/div[1]/div/a[3]");
 	private By monitorsButton = By.name("//div//a[contains(text(),'Monitors')]");
+	private By usernameForSignUp = By.xpath("//*[@id=\"sign-username\"]");
+	private By passwordForSignUp = By.xpath("//*[@id=\"sign-password\"]");
+	private By newUserSignUpButton = By.xpath("//*[@id=\"signInModal\"]/div/div/div[3]/button[2]");
+	private By cartButton = By.xpath("//*[@id=\"cartur\"]");
 	
-		
-	
-	
-	
-	
-	// COnstructor) of the page class
+	// Constructor of the page class
 	public HomePage(WebDriver driver) {
 		this.driver = driver;	
 	}
@@ -54,6 +56,11 @@ public class HomePage {
 	public void clickOnFinalLogin() {
 		driver.findElement(login).click();
 	}
+	public CartPage clickOnCartButton() {
+		driver.navigate().refresh();
+		driver.findElement(By.xpath("//*[@id=\"cartur\"]")).click();
+		return new CartPage(driver);
+	}
 	public void clickOnContact() {
 		driver.findElement(contactButton).click();
 	}
@@ -65,7 +72,8 @@ public class HomePage {
 		
 	}
 	public void clickOnPhones() {
-		driver.findElement(phonesButton).click();
+		driver.navigate().refresh();
+		driver.findElement(By.xpath("//div//a[contains(text(),'Phones')]")).click();
 	}
 	public boolean verifyContactPopupIsDisplayed() {
 		boolean verifyContactPopupIsDisplayed=driver.findElement(By.xpath("//*[@id=\"exampleModalLabel\"]")).isEnabled();
@@ -112,7 +120,7 @@ public class HomePage {
 		return Sign_upCloseButtonIsDisplayed;
 	}
 	public boolean verifySign_upButtonIsDisplayedinSign_upPopup() {
-		boolean Sign_upButtonIsDisplayedinSign_upPopup = driver.findElement(By.xpath("//*[@id=\"signInModal\"]/div/div/div[3]/button[2]")).isDisplayed();
+		boolean Sign_upButtonIsDisplayedinSign_upPopup = driver.findElement(newUserSignUpButton).isDisplayed();
 		return Sign_upButtonIsDisplayedinSign_upPopup;
 	}
 	public List<WebElement> listOfProducts() {
@@ -144,11 +152,70 @@ public class HomePage {
 		boolean monitorsButtonDisplayed = driver.findElement(monitorsButton).isDisplayed();
 		return monitorsButtonDisplayed;
 	}
+    private static String newusername;
+    private static String newpassword;
+
+    public String generateNewPassword() {
+        String basePassword = "password";
+        String uniqueIdentifier = UUID.randomUUID().toString().substring(0, 4);
+        newpassword = basePassword + uniqueIdentifier;
+        return newpassword;
+    } 
+    public String generateNewUserName() {
+    	  String baseUsername = "user";
+          String uniqueIdentifier = UUID.randomUUID().toString().substring(0, 4);
+          newusername = baseUsername + uniqueIdentifier;
+          return newusername;	
+    }
+	public void enterNewUsername() {
+	 String usrname = generateNewUserName();
+		driver.findElement(usernameForSignUp).sendKeys(usrname);
+		System.out.println(newusername);
+	}
+	public void enterNewPassword() {
+		String pwd = generateNewPassword();
+		driver.findElement(passwordForSignUp).sendKeys(pwd);
+		System.out.println(newpassword);
+	}
+	public void clickOnNewUserSign_up() {
+		driver.findElement(newUserSignUpButton).click();
+	}
+	public void enterNewCredentials() {
+		driver.findElement(username).sendKeys(newusername);
+		driver.findElement(password).sendKeys(newpassword);	
+	}
+	public void doLogin(String usrname, String pwd) {
+		driver.findElement(By.id("login2")).click();
+		driver.findElement(username).sendKeys(usrname);
+		
+		driver.findElement(password).sendKeys(pwd);
+		
+		driver.findElement(By.xpath("//*[@id=\"logInModal\"]/div/div/div[3]/button[2]")).click();
+	}
+	public String getLoggedInUserName() {
+		String nameOfUser = driver.findElement(By.xpath("//*[@id=\"nameofuser\"]")).getText();
+		return nameOfUser;
+	}
+	public void clickOnProduct() {
+		driver.findElement(By.xpath("//*[@id=\"tbodyid\"]/div[1]/div/div/h4/a")).click();
+		//driver.navigate().refresh();
+		//driver.findElement(By.xpath("//div//div//a[@onclick=\"addToCart(1)\"]")).click();
+	}
+	public String getTextFromAlert() {
+		return driver.switchTo().alert().getText();
+	}
+	public void acceptAlert() {
+		driver.switchTo().alert().accept();
+	}
 	
 	
+}
+	
+
+
 	
 	
 	
 
 	
-}
+
